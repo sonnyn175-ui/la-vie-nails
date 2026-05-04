@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Annuleringsbeleid – La Vie Nails Utrecht</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --cream: #faf8f5;
+  --rose: #c9a09a;
+  --rose-light: #f2e8e6;
+  --rose-dark: #8c5e59;
+  --text: #2a2a2a;
+  --muted: #8a8a8a;
+  --border: #e8e0dc;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--rose-dark), var(--rose));
+  transform-origin: left; transform: scaleX(0);
+  z-index: 9999; transition: transform .1s linear;
+}
+
+/* ── NAV ── */
+header {
+  position: fixed; top: 3px; left: 0; right: 0; z-index: 200;
+  background: rgba(250,248,245,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow .3s;
+}
+header.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.06); }
+.nav {
+  max-width: 1200px; margin: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 68px;
+}
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; letter-spacing: 3px; color: var(--black);
+  transition: color .2s;
+}
+.logo-text:hover { color: var(--rose-dark); }
+.nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  font-size: .72rem; font-weight: 500; letter-spacing: 1.8px;
+  text-transform: uppercase; color: var(--muted);
+  position: relative; padding-bottom: 2px; transition: color .2s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+  background: var(--rose-dark); transition: width .3s cubic-bezier(.25,.46,.45,.94);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--rose-dark); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-book-btn {
+  background: var(--black) !important; color: var(--white) !important;
+  padding: .48rem 1.3rem; border-radius: 2px; font-weight: 600 !important;
+  transition: background .2s, transform .15s !important;
+}
+.nav-book-btn:hover { background: var(--rose-dark) !important; transform: translateY(-1px); }
+.nav-book-btn::after { display: none !important; }
+.menu-toggle {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; background: none; border: none;
+}
+.menu-toggle span {
+  height: 1.5px; width: 22px; background: var(--black);
+  border-radius: 2px; display: block; transition: transform .3s, opacity .3s;
+}
+.menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.menu-toggle.open span:nth-child(2) { opacity: 0; }
+.menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+@media(max-width:768px) {
+  .nav-links {
+    display: none; flex-direction: column; gap: 0;
+    position: absolute; top: 68px; left: 0; right: 0;
+    background: var(--cream); border-bottom: 1px solid var(--border); padding: .5rem 0;
+  }
+  .nav-links.show { display: flex; }
+  .nav-links li a { display: block; padding: .8rem 2rem; }
+  .menu-toggle { display: flex; }
+}
+
+/* ── PAGE HERO ── */
+.page-hero {
+  min-height: 60vh; padding-top: 71px;
+  background: var(--black);
+  display: flex; align-items: flex-end;
+  position: relative; overflow: hidden;
+}
+.hero-grid-lines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(201,160,154,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,160,154,.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(60px); }
+}
+.hero-glow {
+  position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,160,154,.12) 0%, transparent 70%);
+  top: -100px; right: -100px; pointer-events: none;
+  animation: glowPulse 6s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.page-hero-inner {
+  position: relative; z-index: 2;
+  padding: 5rem 2rem 5rem; max-width: 1200px; width: 100%;
+}
+.hero-eyebrow {
+  font-size: .62rem; font-weight: 600; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--rose); margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: .6rem;
+  opacity: 0; animation: slideUp .7s .2s cubic-bezier(.22,1,.36,1) forwards;
+}
+.hero-eyebrow-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--rose);
+  animation: pulseDot 2s ease infinite;
+}
+@keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(1.4);} }
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 10vw, 8rem);
+  color: var(--white); letter-spacing: 2px; line-height: .92;
+  font-weight: 600; overflow: hidden;
+}
+.hero-title-line { display: block; overflow: hidden; }
+.hero-title-word {
+  display: inline-block;
+  animation: slideUp .9s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-title-line:nth-child(1) .hero-title-word { animation-delay: .4s; }
+.hero-title-line:nth-child(2) .hero-title-word { animation-delay: .55s; }
+@keyframes slideUp { from { transform: translateY(110%); } to { transform: translateY(0); } }
+.hero-sub {
+  margin-top: 1.5rem; font-size: .95rem;
+  color: rgba(255,255,255,.5); max-width: 440px; line-height: 1.85;
+  opacity: 0; animation: fadeIn .8s 1s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:none;} }
+.back-link {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .68rem; font-weight: 600; letter-spacing: 1.8px;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+  transition: color .2s; margin-top: 2.5rem;
+  opacity: 0; animation: fadeIn .8s 1.1s forwards;
+}
+.back-link:hover { color: var(--rose); }
+.back-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* ── MAIN ── */
+main { max-width: 860px; margin: 0 auto; padding: 6rem 1.5rem 7rem; }
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(36px);
+  transition: opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-left {
+  opacity: 0; transform: translateX(-40px);
+  transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
+}
+.reveal-left.visible { opacity: 1; transform: none; }
+
+/* stagger children */
+.stagger-children > * {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1);
+}
+.stagger-children.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:.0s; }
+.stagger-children.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:.08s; }
+.stagger-children.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.16s; }
+.stagger-children.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.24s; }
+.stagger-children.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:.32s; }
+
+/* ── INTRO BOX ── */
+.intro-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2.5rem 2.5rem 2.5rem 3rem;
+  margin-bottom: 3.5rem; position: relative; overflow: hidden;
+}
+.intro-box::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(to bottom, var(--rose-dark), var(--rose));
+}
+.intro-box p { font-size: 1rem; line-height: 1.95; color: var(--muted); }
+.intro-box strong { color: var(--text); font-weight: 600; }
+
+/* ── SECTION LABELS ── */
+.section-eyebrow {
+  font-size: .62rem; font-weight: 600; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--rose-dark); margin-bottom: .6rem;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--black); letter-spacing: 1px; line-height: 1.05;
+  margin-bottom: 2rem;
+}
+
+/* ── POLICY CARDS ── */
+.policy-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-bottom: 3.5rem;
+}
+@media(max-width:640px) { .policy-grid { grid-template-columns: 1fr; } }
+.policy-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2rem;
+  transition: border-color .25s, box-shadow .3s, transform .3s;
+  position: relative; overflow: hidden;
+}
+.policy-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 60%, rgba(201,160,154,.04) 100%);
+  opacity: 0; transition: opacity .3s;
+}
+.policy-card:hover { border-color: var(--rose); box-shadow: 0 12px 40px rgba(201,160,154,.14); transform: translateY(-4px); }
+.policy-card:hover::after { opacity: 1; }
+.card-icon { font-size: 2rem; margin-bottom: 1.1rem; display: block; }
+.card-label { font-size: .58rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--rose-dark); margin-bottom: .5rem; }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--black); margin-bottom: .9rem; line-height: 1.1; }
+.card-body { font-size: .88rem; color: var(--muted); line-height: 1.88; }
+.card-body strong { color: var(--text); font-weight: 600; }
+
+.highlight-card {
+  grid-column: 1 / -1;
+  background: var(--black); border: 1px solid rgba(201,160,154,.15);
+  border-radius: 4px; padding: 2.5rem;
+  display: flex; align-items: flex-start; gap: 2rem;
+  transition: border-color .25s, box-shadow .3s;
+}
+.highlight-card:hover { border-color: rgba(201,160,154,.4); box-shadow: 0 16px 50px rgba(0,0,0,.2); }
+@media(max-width:640px) { .highlight-card { flex-direction: column; gap: 1.2rem; grid-column: auto; } }
+.hl-icon { font-size: 2.5rem; flex-shrink: 0; }
+.highlight-card .card-label { color: var(--rose); }
+.highlight-card .card-title { color: var(--white); font-size: 1.8rem; }
+.highlight-card .card-body { color: rgba(255,255,255,.5); }
+.highlight-card .card-body strong { color: var(--white); }
+
+/* ── TIKKIE SECTION ── */
+.tikkie-section {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2.8rem; margin-bottom: 3.5rem;
+}
+.tikkie-header { display: flex; align-items: center; gap: 1.1rem; margin-bottom: .5rem; }
+.tikkie-icon {
+  width: 52px; height: 52px; background: var(--rose-light);
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 1.5rem; flex-shrink: 0;
+}
+.tikkie-header-text .label { font-size: .58rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--rose-dark); margin-bottom: .3rem; }
+.tikkie-header-text h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; color: var(--black); }
+.tikkie-steps { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.8rem; }
+.tikkie-step {
+  display: flex; align-items: flex-start; gap: 1.1rem;
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1);
+}
+.tikkie-section.visible .tikkie-step:nth-child(1) { opacity:1;transform:none;transition-delay:.1s; }
+.tikkie-section.visible .tikkie-step:nth-child(2) { opacity:1;transform:none;transition-delay:.2s; }
+.tikkie-section.visible .tikkie-step:nth-child(3) { opacity:1;transform:none;transition-delay:.3s; }
+.tikkie-section.visible .tikkie-step:nth-child(4) { opacity:1;transform:none;transition-delay:.4s; }
+.step-num {
+  width: 30px; height: 30px; background: var(--black); color: var(--white);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 700; flex-shrink: 0; margin-top: .1rem;
+  transition: background .2s;
+}
+.tikkie-step:hover .step-num { background: var(--rose-dark); }
+.step-text { font-size: .9rem; color: var(--muted); line-height: 1.78; }
+.step-text strong { color: var(--text); font-weight: 600; }
+.tikkie-note {
+  margin-top: 1.8rem; background: var(--rose-light); border-radius: 3px;
+  padding: 1.1rem 1.4rem; font-size: .82rem; color: var(--rose-dark); line-height: 1.75;
+  border-left: 2px solid var(--rose);
+}
+.tikkie-note strong { font-weight: 600; }
+
+/* ── RULES TABLE ── */
+.rules-section { margin-bottom: 3.5rem; }
+.table-wrap { overflow-x: auto; border-radius: 4px; border: 1px solid var(--border); }
+.rules-table {
+  width: 100%; border-collapse: collapse; font-size: .88rem;
+  background: var(--white);
+}
+.rules-table th {
+  text-align: left; padding: .9rem 1.2rem;
+  font-size: .6rem; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--muted);
+  background: var(--cream); border-bottom: 2px solid var(--border);
+}
+.rules-table td { padding: .9rem 1.2rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+.rules-table tr:last-child td { border-bottom: none; }
+.rules-table tbody tr {
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .5s, transform .5s, background .2s;
+}
+.rules-table.visible tbody tr:nth-child(1) { opacity:1;transform:none;transition-delay:.05s; }
+.rules-table.visible tbody tr:nth-child(2) { opacity:1;transform:none;transition-delay:.12s; }
+.rules-table.visible tbody tr:nth-child(3) { opacity:1;transform:none;transition-delay:.19s; }
+.rules-table.visible tbody tr:nth-child(4) { opacity:1;transform:none;transition-delay:.26s; }
+.rules-table tbody tr:hover td { background: rgba(201,160,154,.04); }
+.td-situation { font-weight: 600; color: var(--black); }
+.td-cost { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--rose-dark); font-weight: 600; white-space: nowrap; }
+.td-cost.free { color: #5a8a6a; }
+.badge {
+  display: inline-block; font-size: .58rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: .22rem .65rem; border-radius: 20px;
+}
+.badge-ok { background: #e8f5e9; color: #2e7d32; }
+.badge-warn { background: #fff3e0; color: #e65100; }
+.badge-red { background: #fde8e8; color: #c0392b; }
+.table-note { margin-top: .9rem; font-size: .78rem; color: var(--muted); line-height: 1.7; }
+
+/* ── FAQ ── */
+.faq-section { margin-bottom: 3.5rem; }
+.faq-item {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 4px; margin-bottom: .75rem; overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+}
+.faq-item:hover { border-color: var(--rose); }
+.faq-item.open { border-color: var(--rose); box-shadow: 0 6px 24px rgba(201,160,154,.1); }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.6rem; cursor: pointer;
+  font-weight: 600; font-size: .9rem; color: var(--text);
+  transition: color .2s;
+  gap: 1rem;
+}
+.faq-q:hover { color: var(--rose-dark); }
+.faq-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--rose-light); color: var(--rose-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0; font-weight: 400;
+  transition: background .25s, transform .3s, color .2s;
+}
+.faq-item.open .faq-icon { background: var(--rose-dark); color: var(--white); transform: rotate(45deg); }
+.faq-body {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows .35s cubic-bezier(.22,1,.36,1);
+}
+.faq-item.open .faq-body { grid-template-rows: 1fr; }
+.faq-body-inner { overflow: hidden; }
+.faq-a { padding: 0 1.6rem 1.4rem; font-size: .88rem; color: var(--muted); line-height: 1.88; }
+.faq-a strong { color: var(--text); font-weight: 600; }
+
+/* ── CTA ── */
+.cta-block {
+  background: var(--black); border-radius: 4px;
+  padding: 3.5rem 2.5rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-block::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 120%, rgba(201,160,154,.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.cta-eyebrow { font-size: .62rem; letter-spacing: 3.5px; text-transform: uppercase; color: var(--rose); margin-bottom: .9rem; }
+.cta-block h3 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; color: var(--white); margin-bottom: .9rem; line-height: 1.05; }
+.cta-block p { font-size: .9rem; color: rgba(255,255,255,.45); line-height: 1.8; margin-bottom: 2rem; max-width: 380px; margin-inline: auto; }
+.btn-primary {
+  display: inline-block; background: var(--white); color: var(--black);
+  font-weight: 600; font-size: .75rem; letter-spacing: 1.8px;
+  text-transform: uppercase; padding: .95rem 2.6rem; border-radius: 2px;
+  position: relative; overflow: hidden;
+  transition: color .25s, transform .2s, box-shadow .2s;
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--rose-light); transform: scaleX(0);
+  transform-origin: left; transition: transform .3s cubic-bezier(.25,.46,.45,.94); z-index: 0;
+}
+.btn-primary span { position: relative; z-index: 1; }
+.btn-primary:hover::before { transform: scaleX(1); }
+.btn-primary:hover { color: var(--rose-dark); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black); padding: 3.5rem 1.5rem 2.2rem;
+  text-align: center; border-top: 1px solid rgba(255,255,255,.05);
+}
+.footer-logo { display: flex; align-items: center; justify-content: center; gap: .8rem; margin-bottom: .8rem; }
+.footer-logo span { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; letter-spacing: 3px; color: var(--white); }
+.footer-links { display: flex; justify-content: center; gap: 2rem; margin: 1.2rem 0 1.6rem; flex-wrap: wrap; }
+.footer-links a { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.3); transition: color .2s; }
+.footer-links a:hover { color: var(--rose); }
+.footer-links a.active-link { color: var(--rose) !important; }
+footer p { font-size: .72rem; color: rgba(255,255,255,.22); letter-spacing: .5px; }
+
+/* ── MOBILE ── */
+@media(max-width:768px) {
+  main { padding: 3.5rem 1.2rem 5rem; }
+  .page-hero-inner { padding: 4rem 1.2rem 4rem; }
+  .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+  .tikkie-section { padding: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<!-- NAV -->
+<header id="site-header">
+  <div class="nav">
+    <a href="La Vie Nails v2.html" class="logo-text">La Vie Nails</a>
+    <button class="menu-toggle" id="toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="La Vie Nails v2.html#home">Home</a></li>
+      <li><a href="La Vie Nails v2.html#about">Over Sofia</a></li>
+      <li><a href="La Vie Nails v2.html#menu">Behandelingen</a></li>
+      <li><a href="La Vie Nails v2.html#prices">Prijzen</a></li>
+      <li><a href="Annulering.html" class="active">Annulering</a></li>
+      <li><a href="La Vie Nails v2.html#contact" class="nav-book-btn">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      La Vie Nails · Beleid
+    </div>
+    <h1 class="hero-title">
+      <span class="hero-title-line"><span class="hero-title-word">Annulerings</span></span>
+      <span class="hero-title-line"><em style="font-style:italic;font-weight:300;"><span class="hero-title-word">beleid</span></em></span>
+    </h1>
+    <p class="hero-sub">Afzeggen kan — als je het op tijd doet. Zo houd ik mijn agenda eerlijk voor iedereen.</p>
+    <a href="La Vie Nails v2.html" class="back-link">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Terug naar hoofdpagina
+    </a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- INTRO -->
+  <div class="intro-box reveal">
+    <p>Bij La Vie Nails zet ik elke afspraak met zorg voor jou in mijn agenda. Een no-show of last-minute annulering kost mij een tijdslot dat ik niet meer kan invullen. Daarom hanteer ik een duidelijk en eerlijk annuleringsbeleid. <strong>Annuleer je minimaal 30 minuten van tevoren? Dan zijn er geen kosten.</strong> Daarna geldt er een annuleringsvergoeding via Tikkie.</p>
+  </div>
+
+  <!-- POLICY CARDS -->
+  <div class="policy-grid stagger-children reveal">
+
+    <div class="policy-card">
+      <span class="card-icon">✅</span>
+      <div class="card-label">Gratis annuleren</div>
+      <div class="card-title">30+ minuten<br>van tevoren</div>
+      <div class="card-body">Zeg je af <strong>minstens 30 minuten voor je afspraak</strong>? Dan zijn er helemaal geen kosten. Je kunt eenvoudig een nieuw moment inplannen.</div>
+    </div>
+
+    <div class="policy-card">
+      <span class="card-icon">⚠️</span>
+      <div class="card-label">Te laat afzeggen</div>
+      <div class="card-title">Minder dan<br>30 minuten</div>
+      <div class="card-body">Zeg je te laat af of kom je niet opdagen? Dan stuur ik je een <strong>Tikkie voor 50% van het behandelbedrag</strong>. Dit wordt automatisch verzonden.</div>
+    </div>
+
+    <div class="highlight-card">
+      <div class="hl-icon">💸</div>
+      <div class="hl-content">
+        <div class="card-label">Annuleringsvergoeding</div>
+        <div class="card-title">50% van de behandelprijs</div>
+        <div class="card-body">Bij te late annulering of no-show ontvang je <strong>automatisch een Tikkie</strong> voor 50% van de geboekte behandeling. Betaal je niet binnen 48 uur, dan kan ik je de volgende keer vragen om vooruit te betalen.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIKKIE STEPS -->
+  <div class="tikkie-section reveal" id="tikkie-sec">
+    <div class="tikkie-header">
+      <div class="tikkie-icon">📲</div>
+      <div class="tikkie-header-text">
+        <div class="label">Hoe werkt het?</div>
+        <h3>Betalen via Tikkie</h3>
+      </div>
+    </div>
+    <div class="tikkie-steps">
+      <div class="tikkie-step">
+        <div class="step-num">1</div>
+        <div class="step-text">Je zegt af <strong>minder dan 30 minuten</strong> voor je afspraak, of je komt niet opdagen.</div>
+      </div>
+      <div class="tikkie-step">
+        <div class="step-num">2</div>
+        <div class="step-text">Ik stuur je <strong>automatisch een Tikkie</strong> naar het nummer waarmee je hebt geboekt.</div>
+      </div>
+      <div class="tikkie-step">
+        <div class="step-num">3</div>
+        <div class="step-text">Je betaalt <strong>50% van de behandelprijs</strong> — snel en makkelijk via iDEAL of andere betaalmethode.</div>
+      </div>
+      <div class="tikkie-step">
+        <div class="step-num">4</div>
+        <div class="step-text">Daarna kun je gewoon <strong>een nieuwe afspraak inplannen</strong>. Geen gedoe, geen nare sfeer.</div>
+      </div>
+    </div>
+    <div class="tikkie-note">
+      <strong>Let op:</strong> Bij herhaalde no-shows of niet-betaalde Tikkies behoud ik het recht om toekomstige afspraken alleen nog te bevestigen na vooruitbetaling.
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="rules-section reveal">
+    <p class="section-eyebrow">Snel overzicht</p>
+    <h2 class="section-title">Wat kost wat?</h2>
+    <div class="table-wrap">
+      <table class="rules-table" id="rules-table">
+        <thead>
+          <tr><th>Situatie</th><th>Kosten</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-situation">Afzeggen 30+ min van tevoren</td>
+            <td class="td-cost free">€0,–</td>
+            <td><span class="badge badge-ok">Gratis</span></td>
+          </tr>
+          <tr>
+            <td class="td-situation">Afzeggen minder dan 30 min</td>
+            <td class="td-cost">50% van behandeling</td>
+            <td><span class="badge badge-warn">Tikkie volgt</span></td>
+          </tr>
+          <tr>
+            <td class="td-situation">No-show (niet komen zonder bericht)</td>
+            <td class="td-cost">50% van behandeling</td>
+            <td><span class="badge badge-red">Tikkie volgt</span></td>
+          </tr>
+          <tr>
+            <td class="td-situation">Te laat komen (meer dan 15 min)</td>
+            <td class="td-cost">Afspraak vervalt*</td>
+            <td><span class="badge badge-warn">Overleg nodig</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">* Als je meer dan 15 minuten te laat bent zonder bericht, behoud ik het recht om de afspraak niet meer te kunnen uitvoeren. Neem altijd contact op als je weet dat je te laat bent!</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section reveal">
+    <p class="section-eyebrow">Veelgestelde vragen</p>
+    <h2 class="section-title">Alles duidelijk?</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">Hoe zeg ik mijn afspraak af? <div class="faq-icon">+</div></div>
+      <div class="faq-body"><div class="faq-body-inner"><div class="faq-a">Stuur me een <strong>WhatsApp of bel me</strong> op het nummer in mijn contact. Zorg dat ik je bericht ook echt ontvang — een niet-geopend bericht telt niet als annulering.</div></div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Wat als ik een noodgeval heb? <div class="faq-icon">+</div></div>
+      <div class="faq-body"><div class="faq-body-inner"><div class="faq-a">Bij echte noodgevallen kijk ik altijd naar de situatie. <strong>Neem zo snel mogelijk contact op</strong> en laat het me weten. Ik ben een mens, geen machine — overleg is altijd mogelijk.</div></div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Moet ik het Tikkie per se betalen? <div class="faq-icon">+</div></div>
+      <div class="faq-body"><div class="faq-body-inner"><div class="faq-a">Ja, de annuleringsvergoeding is onderdeel van mijn beleid. Bij niet-betaling binnen <strong>48 uur</strong> kan ik vragen om vooruitbetaling bij een volgende afspraak, of de boeking weigeren.</div></div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Geldt dit ook voor nieuwe klanten? <div class="faq-icon">+</div></div>
+      <div class="faq-body"><div class="faq-body-inner"><div class="faq-a">Ja, het beleid geldt voor <strong>alle klanten</strong> — nieuw en vast. Mijn agenda is voor iedereen even waardevol.</div></div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Kan ik mijn afspraak ook verzetten? <div class="faq-icon">+</div></div>
+      <div class="faq-body"><div class="faq-body-inner"><div class="faq-a">Absoluut! Als je <strong>minstens 30 minuten van tevoren</strong> contact opneemt, kun je de afspraak gratis verzetten naar een ander moment. Zolang er plek is, regel ik dat graag voor je.</div></div></div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-block reveal">
+    <p class="cta-eyebrow">✦ Klaar om te boeken?</p>
+    <h3>Maak een afspraak</h3>
+    <p>Nu je het beleid kent, kun je met een gerust hart boeken. Tot snel bij La Vie Nails!</p>
+    <a href="La Vie Nails v2.html#contact" class="btn-primary"><span>Afspraak Maken →</span></a>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <span>La Vie Nails</span>
+  </div>
+  <div class="footer-links">
+    <a href="La Vie Nails v2.html#home">Home</a>
+    <a href="La Vie Nails v2.html#about">Over Sofia</a>
+    <a href="La Vie Nails v2.html#menu">Behandelingen</a>
+    <a href="La Vie Nails v2.html#prices">Prijzen</a>
+    <a href="Annulering.html" class="active-link">Annulering</a>
+    <a href="La Vie Nails v2.html#contact">Contact</a>
+  </div>
+  <p>© 2026 La Vie Nails Utrecht · Utrechtseweg 22 · 3544 NA Utrecht</p>
+</footer>
+
+<script>
+// ── SCROLL PROGRESS ──
+const progress = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  progress.style.transform = 'scaleX(' + Math.min(pct, 1) + ')';
+}, { passive: true });
+
+// ── HEADER ──
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ── NAV TOGGLE ──
+const toggle = document.getElementById('toggle');
+const navLinks = document.getElementById('nav-links');
+toggle.addEventListener('click', () => {
+  toggle.classList.toggle('open');
+  navLinks.classList.toggle('show');
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  toggle.classList.remove('open');
+  navLinks.classList.remove('show');
+}));
+
+// ── REVEAL OBSERVER ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    obs.unobserve(e.target);
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal, .reveal-left, .stagger-children').forEach(el => obs.observe(el));
+
+// Tikkie steps observer
+const tikkieObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    tikkieObs.unobserve(e.target);
+  });
+}, { threshold: 0.15 });
+const tikkieSec = document.getElementById('tikkie-sec');
+if (tikkieSec) tikkieObs.observe(tikkieSec);
+
+// Table rows observer
+const tableObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    tableObs.unobserve(e.target);
+  });
+}, { threshold: 0.2 });
+const rulesTable = document.getElementById('rules-table');
+if (rulesTable) tableObs.observe(rulesTable);
+
+// ── FAQ ACCORDION ──
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
